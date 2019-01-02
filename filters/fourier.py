@@ -69,3 +69,4 @@ if __name__=='__main__':
     gauss_s = inverse_fourier_transform(img_ft*gauss_f, output_centered=False)
     # IO.imshow(np.log(1 + np.abs(img_ft)))
     IO.imshow(np.abs(gauss_s))
+
