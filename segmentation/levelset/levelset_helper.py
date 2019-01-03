@@ -38,7 +38,7 @@ def im2double(a):
 # Converts a mask to a SDF
 def mask2phi(init_a):
     phi = bwdist(init_a) - bwdist(1 - init_a) + im2double(init_a) - 0.5
-    return phi
+    return -phi
 
 def curvature_central(phi):
     phi_x, phi_y = np.gradient(phi)

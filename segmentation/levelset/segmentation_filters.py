@@ -4,6 +4,7 @@ from misc.helpers import StdIO as IO
 from matplotlib import pyplot as plt
 import levelset_helper as H
 from filters.spatial import Filter
+from scipy.misc import comb
 
 eps = np.finfo(float).eps
 
@@ -22,7 +23,7 @@ class LevelSetFilter:
         self.tolerance = convg_error
 
     """
-    Active contour without edges - Chan & Vese
+    Active contour without edges - Chan & Vese, TIP'02
     """
     def chan_vese(self, mu=0.1, color='r', disp_interval=20):
         """
@@ -81,7 +82,7 @@ class LevelSetFilter:
         return phi, its
 
     """
-    Geodesic Active Contours - Sapiro et al.
+    Geodesic Active Contours - Casellas et al., IJCV'99
     """
     def gac(self, mu=1., c0=-0.8, sigma=2., color='b', disp_interval=20):
         """
@@ -151,13 +152,135 @@ class LevelSetFilter:
 
         return phi, its
 
+    """
+    Legendre Level Set (L2S) - Mukherjee & Acton, SPL'2015
+    """
+    def l2s(self, k=1, mu=0.2, color='b', disp_interval=20):
+        """
+        :param k: Order of polynomial
+        :param mu: Smoothness parameter
+        :param color: contour color
+        :param disp_interval: interval to display contour
+        :return: levelset, # iterations
+        """
+
+        def legendre_basis(img, k):
+            '''
+            :param img: image of dimension m x n
+            :param k: order of polynomial ( k = 0 is chan-vese)
+            :return: matrix B: (Nr*Nc)x(k+1)^2, each column is a Legendre polynomial
+            '''
+            Nr, Nc = img.shape[0], img.shape[1]
+            N = Nr*Nc
+            B = np.zeros((N, (k+1)*(k+1)))
+            def legendre_1d(N, k):
+                """
+                Compute 1-d legendre polynomial bases
+                :param N: length of signal
+                :param k: degree of polynomial
+                :return: B: N x (k+1)
+                """
+                xx = np.linspace(-1, 1, N)      # N points in [-1,1]
+                p0 = np.ones(N, dtype='float')
+                B = np.zeros((N, k+1), dtype='float')
+                B[:, 0] = p0                    # first basis is all ones
+
+                for n in range(1, k+1):         # looping through the orders
+                    Pn = 0.
+                    for m in range(0, n+1):     # m \in [0, n]
+                        Pn += (comb(n, m)**2) * ((xx - 1)**(n - m))*((xx + 1)**m)
+                    B[:, n] = Pn/(2**n)
+                return B
+
+            B_r = legendre_1d(Nr, k)        # 1-d legendre bases, Nr x (k + 1)
+            B_c = legendre_1d(Nc, k)        # 1-d legendre bases, Nc x (k + 1)
+
+            # Now compute the 2-d Legendre bases as outer product of 1-d
+            idx = 0
+            for ii in range(k+1):
+                for jj in range(k+1):
+                    B[:, idx] = np.outer(B_r[:, ii], B_c[:, jj]).flatten()
+                    idx += 1
+            return B
+
+
+        phi = H.mask2phi(self.init_mask)
+        phi0 = np.copy(phi)
+        u = self.img
+        stop = False
+        prev_mask = self.init_mask
+        its = 0
+        c = 0
+
+        B = legendre_basis(u, k)
+
+        if (disp_interval > 0):
+            fig = plt.figure()
+            ax = fig.add_subplot(1,1,1)
+
+        while (its < self.max_iter and stop==False):
+            h_phi = heaviside(phi, 2.0)
+            delta_phi = dirac(phi, 2.0)
+
+            inside_mask = h_phi
+            outside_mask = 1.0 - h_phi
+            kappa = H.curvature_central(phi)
+
+            in_vec = inside_mask.flatten()
+            out_vec = outside_mask.flatten()
+            u_in_vec, u_out_vec = u.flatten() * in_vec, u.flatten() * out_vec
+
+            A1 = np.transpose(B)
+            A2 = A1 * np.repeat(in_vec[np.newaxis, :], A1.shape[0], axis=0)
+            B2 = A1 * np.repeat(out_vec[np.newaxis, :], A1.shape[0], axis=0)
+
+            c1_vec = np.linalg.solve(np.matmul(A1, np.transpose(A2)), np.matmul(A1, u_in_vec[:, np.newaxis]))
+            c2_vec = np.linalg.solve(np.matmul(A1, np.transpose(B2)), np.matmul(A1, u_out_vec[:, np.newaxis]))
+            p1_vec = np.matmul(B, c1_vec)
+            p2_vec = np.matmul(B, c2_vec)
+            p1, p2 = np.reshape(p1_vec, u.shape), np.reshape(p2_vec, u.shape)
+
+            F = -(u - p1)**2 + (u - p2)**2
+
+            dphi_dt = (F/np.max(np.abs(F) + eps) + mu * kappa) * delta_phi          # Gradient decent
+            dt = 0.8/(np.max(np.abs(dphi_dt)) + eps)                                # CFL criteria
+            phi += dt * dphi_dt
+            phi = H.NeumannBoundCond(phi)
+            phi = H.sussman(phi, 0.5)
+
+            # -- Convergence criteria
+            new_mask = 1.*(phi >=0)
+            c = H.convergence(prev_mask, new_mask, self.tolerance, c)
+            if c <= 5:
+                its = its + 1
+                prev_mask = new_mask
+            else:
+                stop = True
+
+            # -- Display of curve
+            if (disp_interval > 0 and np.mod(its, disp_interval)==0):
+                ax.cla()
+                ax.imshow(u, cmap='gray')
+                ax.contour(phi, levels=[0], colors=color)
+                ax.contour(phi0, levels=[0], colors='g')
+                ax.set_axis_off()
+                plt.draw()
+                plt.pause(1e-5)
+
+        return phi, its
+
+
+
+
 if __name__=='__main__':
     from misc.helpers import StdIO as IO
-    img = IO.imread_2d('../../image_2.png')
+    img = IO.imread_2d('../../image_3.png')
     mask = np.zeros(img.shape)
     mask[40:80, 40:100] = 1.
-    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.5).chan_vese(mu=1.0, color='y', disp_interval=50)
-    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1500, convg_error=0.1).gac(mu=1.0, c0=-1.5, sigma=2.0, color='b', disp_interval=50)
+    # mask[20:100, 20:100] = 1.
+    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.5).chan_vese(mu=0.2, color='y', disp_interval=50)
+    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1500, convg_error=0.1).gac(mu=1.0, c0=1.5, sigma=2.0, color='b', disp_interval=50)
+    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=500, convg_error=0.01).l2s(k=2, mu=0.6, color='k', disp_interval=50)
     IO.imoverlay(img, seg, title='Final result', linewidth=4)
 
 
