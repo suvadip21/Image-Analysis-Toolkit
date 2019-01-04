@@ -4,9 +4,17 @@ import scipy.ndimage as ndimage
 import cv2
 from matplotlib import pyplot as plt
 import glob
-
-
 eps = 1e-8
+
+
+
+def bwdist(a):
+    """
+    Intermediary function. 'a' has only True/False vals,
+    so we convert them into 0/1 values - in reverse.
+    True is 0, False is 1, distance_transform_edt wants it that way.
+    """
+    return nd.distance_transform_edt(a == 0)
 
 class StdIO:
     @staticmethod
@@ -60,6 +68,12 @@ class StdIO:
 
 
 class StdIP:
+    @staticmethod
+    def im2double(a):
+        a = a.astype(np.float)
+        a /= np.abs(a).max()
+        return a
+
     @staticmethod
     def imresize(img, orig_res_mm=1., des_res_mm=0.5, interpolation='cubic'):
         frac = orig_res_mm/des_res_mm
@@ -132,10 +146,6 @@ class Interactive:
 
         [xx, yy] = np.meshgrid(range(Nc), range(Nr))
         f = (xx - x0)**2 + (yy - y0)**2 - r*r
-        # ax.plot(x0, y0, '*')
-        # ax.contour(f, levels=[0])
-        # plt.draw()
-        # plt.show()
         return -f
 
     def draw_multi_circle(self, rad=10):
@@ -160,6 +170,11 @@ class Interactive:
         return 1. * (bw_img > 0)
 
     def draw_polygons(self, n_poly=1):
+        """
+        Draw polygons, uses the _roipoly function courtsey: https://github.com/jdoepfert/roipoly.py. Close a polygon by right-click
+        :param n_poly: number of polygons to draw. This needs to be prefixed.
+        :return: binary image with inside polygon as 1
+        """
         from _roipoly import roipoly
         mask = np.zeros(self.img.shape, dtype='float')
         for ii in range(n_poly):
@@ -181,7 +196,7 @@ if __name__ == '__main__':
     # pts, pt_img = Interactive(img).draw_points(n_pts=- 4)
     # circ = Interactive(img).draw_circle(rad=20)
     # circ = Interactive(img).draw_multi_circle(rad=10)
-    circ = Interactive(img).draw_polygons(n_poly=2)
+    circ = Interactive(img).draw_polygons(n_poly=5)
     StdIO.imoverlay(img, circ)
     # StdIO.imshow(pt_img)
     print "done"
