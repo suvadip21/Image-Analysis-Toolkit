@@ -8,11 +8,32 @@ from matplotlib import pyplot as plt
 from misc.helpers import StdIP as IP
 from misc.helpers import StdIO as IO
 from skimage.morphology import black_tophat, skeletonize, convex_hull_image, remove_small_objects, remove_small_holes, label
+from skimage.morphology import binary_erosion, binary_dilation, binary_closing, binary_opening
 from skimage.measure import regionprops
+from skimage.morphology import disk
 
 class BinaryMorphology:
+    """
+    Set of methods which will work on binary images only
+    """
     def __init__(self, img):
         self.bw = (img > 0.1) * 1.  # force convert to gray
+
+    def bwdilate(self, r=1):
+        se = disk(r)
+        return binary_dilation(self.bw > 0, selem=se)
+
+    def bwerode(self, r=1):
+        se = disk(r)
+        return binary_erosion(self.bw > 0, selem=se)
+
+    def bwopen(self, r=1):
+        se = disk(r)
+        return binary_opening(self.bw > 0, selem=se)
+
+    def bwclose(self, r=1):
+        se = disk(r)
+        return binary_closing(self.bw > 0, selem=se)
 
     def bwskel(self):
         """
@@ -34,7 +55,6 @@ class BinaryMorphology:
         :return:
         """
         return remove_small_holes(self.bw > 0., min_size=area) * 1.
-
 
     def bwlabel(self):
         """
@@ -64,14 +84,19 @@ class BinaryMorphology:
         return top_k_comp
 
 
+# class Morphology:
+#     def __init__(self):
+
+
+
 if __name__ == '__main__':
     from segmentation.classic import Thresholding
     img = IO.imread_2d('../image_2.png')
     bin_img = Thresholding(img).percentile_threshold(p1=75, p2=100)
-    morph_img = BinaryMorphology(bin_img).bwareaopen(area=30)
+    morph_img = BinaryMorphology(bin_img).bwclose(r=4)
     label_img, n_cc = BinaryMorphology(morph_img).bwlabel()
 
-    k_largest_img = BinaryMorphology(morph_img).klargestregions(k=7)
+    k_largest_img = BinaryMorphology(morph_img).klargestregions(k=1)
 
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)

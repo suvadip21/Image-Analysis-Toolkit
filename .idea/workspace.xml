@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a018feb9-799a-4183-b9bf-baa4e9f0f9a9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/morphology/morphological_filters.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/segmentation/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/misc/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/misc/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/segmentation/classic.py" beforeDir="false" afterPath="$PROJECT_DIR$/segmentation/classic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/morphology/morphological_filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/morphology/morphological_filters.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,11 +27,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/segmentation/classic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="52" column="77" selection-start-line="52" selection-start-column="77" selection-end-line="52" selection-end-column="77" />
+            <state relative-caret-position="570">
+              <caret line="51" column="57" lean-forward="true" selection-start-line="51" selection-start-column="57" selection-end-line="51" selection-end-column="57" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
                 <element signature="e#293#516#0" />
@@ -45,11 +41,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/morphology/morphological_filters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="361">
+              <caret line="95" column="49" selection-start-line="95" selection-start-column="49" selection-end-line="95" selection-end-column="49" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -73,7 +69,6 @@
     <setting file="file://$PROJECT_DIR$/filters/fourier.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/filters/spatial.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/segmentation/levelset/levelset_helper.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/misc/curve_fitting.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/segmentation/classic.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/misc/helpers.py" root0="SKIP_INSPECTION" />
@@ -131,12 +126,6 @@
               <item name="image-analysis-toolkit" type="b2602c69:ProjectViewProjectNode" />
               <item name="image-analysis-toolkit" type="462c0819:PsiDirectoryNode" />
               <item name="segmentation" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="image-analysis-toolkit" type="b2602c69:ProjectViewProjectNode" />
-              <item name="image-analysis-toolkit" type="462c0819:PsiDirectoryNode" />
-              <item name="segmentation" type="462c0819:PsiDirectoryNode" />
-              <item name="levelset" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -289,6 +278,15 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
@@ -302,11 +300,11 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.2851485" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32970297" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32970297" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32970297" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32970297" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.25544554" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -425,16 +423,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/morphology/morphological_filters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2864">
@@ -447,12 +435,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/segmentation/classic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="52" column="77" selection-start-line="52" selection-start-column="77" selection-end-line="52" selection-end-column="77" />
+        <state relative-caret-position="570">
+          <caret line="51" column="57" lean-forward="true" selection-start-line="51" selection-start-column="57" selection-end-line="51" selection-end-column="57" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
             <element signature="e#293#516#0" />
             <element signature="e#614#1027#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morphology/morphological_filters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="95" column="49" selection-start-line="95" selection-start-column="49" selection-end-line="95" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
