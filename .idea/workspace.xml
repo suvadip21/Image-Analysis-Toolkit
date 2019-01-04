@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a018feb9-799a-4183-b9bf-baa4e9f0f9a9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/misc/_roipoly.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/misc/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/misc/helpers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/segmentation/levelset/levelset_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/segmentation/levelset/levelset_helper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py" afterDir="false" />
     </list>
@@ -13,48 +16,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/misc/helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="82" column="17" lean-forward="true" selection-start-line="82" selection-start-column="17" selection-end-line="82" selection-end-column="17" />
+            <state relative-caret-position="301">
+              <caret line="161" column="38" selection-start-line="161" selection-start-column="38" selection-end-line="161" selection-end-column="38" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#4574#5383#0" />
+                <element signature="e#5432#5862#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/filters/fourier.py">
+        <entry file="file://$PROJECT_DIR$/misc/_roipoly.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="631">
-              <caret line="63" selection-start-line="63" selection-end-line="70" selection-end-column="30" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="1740">
+              <caret line="119" selection-start-line="119" selection-end-line="119" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2177">
-              <caret line="282" column="129" lean-forward="true" selection-start-line="282" selection-start-column="129" selection-end-line="282" selection-end-column="129" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#709#2380#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/segmentation/levelset/levelset_helper.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-727">
-              <caret line="40" column="12" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="12" />
+            <state relative-caret-position="3900">
+              <caret line="266" column="33" selection-start-line="266" selection-start-column="16" selection-end-line="266" selection-end-column="33" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -63,10 +52,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/filters/spatial.py">
+        <entry file="file://$PROJECT_DIR$/misc/curve_fitting.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="51" column="50" selection-start-line="51" selection-start-column="50" selection-end-line="51" selection-end-column="50" />
+            <state relative-caret-position="435">
+              <caret line="33" column="16" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="16" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -91,7 +80,9 @@
     <setting file="file://$PROJECT_DIR$/filters/spatial.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/segmentation/levelset/levelset_helper.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/misc/curve_fitting.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/misc/helpers.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/misc/_roipoly.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -99,6 +90,9 @@
         <option value="$PROJECT_DIR$/filters/fourier.py" />
         <option value="$PROJECT_DIR$/segmentation/levelset/levelset_helper.py" />
         <option value="$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py" />
+        <option value="$PROJECT_DIR$/misc/user_interact.py" />
+        <option value="$PROJECT_DIR$/misc/_roipoly.py" />
+        <option value="$PROJECT_DIR$/misc/helpers.py" />
       </list>
     </option>
   </component>
@@ -111,6 +105,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -143,11 +138,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.appearance" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -161,7 +156,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.segmentation_filters">
+  <component name="RunManager" selected="Python.helpers">
     <configuration name="fourier" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="image-analysis-toolkit" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -175,6 +170,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/filters/fourier.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="helpers" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="image-analysis-toolkit" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/misc" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/misc/helpers.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -206,6 +222,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.helpers" />
         <item itemvalue="Python.segmentation_filters" />
         <item itemvalue="Python.fourier" />
       </list>
@@ -228,7 +245,7 @@
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15007898" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1348078" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -247,17 +264,6 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py</url>
-          <line>267</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/filters/diffusion_filters.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -272,30 +278,10 @@
     <entry file="file://$PROJECT_DIR$/image_1.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/filters/spatial.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="51" column="50" selection-start-line="51" selection-start-column="50" selection-end-line="51" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/anaconda2/lib/python2.7/site-packages/numpy/core/fromnumeric.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="1867" selection-start-line="1867" selection-end-line="1867" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/filters/fourier.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="631">
-          <caret line="63" selection-start-line="63" selection-end-line="70" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -306,10 +292,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/misc/helpers.py">
+    <entry file="file://$PROJECT_DIR$/filters/spatial.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="82" column="17" lean-forward="true" selection-start-line="82" selection-start-column="17" selection-end-line="82" selection-end-column="17" />
+        <state relative-caret-position="-104">
+          <caret line="68" column="29" lean-forward="true" selection-start-line="68" selection-start-column="29" selection-end-line="68" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/misc/user_interact.py" />
+    <entry file="file://$PROJECT_DIR$/filters/fourier.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="26" column="43" lean-forward="true" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="43" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -318,21 +315,63 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/segmentation/levelset/levelset_helper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-727">
-          <caret line="40" column="12" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="12" />
+        <state relative-caret-position="795">
+          <caret line="53" column="19" lean-forward="true" selection-start-line="53" selection-start-column="19" selection-end-line="53" selection-end-column="19" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py">
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2177">
-          <caret line="282" column="129" lean-forward="true" selection-start-line="282" selection-start-column="129" selection-end-line="282" selection-end-column="129" />
+        <state relative-caret-position="654">
+          <caret line="1082" selection-start-line="1082" selection-end-line="1082" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda2/lib/python2.7/site-packages/matplotlib/contour.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="1003" selection-start-line="1003" selection-end-line="1003" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/misc/helpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="161" column="38" selection-start-line="161" selection-start-column="38" selection-end-line="161" selection-end-column="38" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#709#2380#0" />
+            <element signature="e#4574#5383#0" />
+            <element signature="e#5432#5862#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/misc/_roipoly.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1740">
+          <caret line="119" selection-start-line="119" selection-end-line="119" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/segmentation/levelset/segmentation_filters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3900">
+          <caret line="266" column="33" selection-start-line="266" selection-start-column="16" selection-end-line="266" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/misc/curve_fitting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="33" column="16" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

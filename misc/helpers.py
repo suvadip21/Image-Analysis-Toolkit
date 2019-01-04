@@ -34,7 +34,7 @@ class StdIO:
         if imadjust:
             img = (img - np.min(img))/(eps + np.max(img) - np.min(img))
         plt.imshow(img, cmap='gray')
-        plt.contour(seg, levels=levels, colors=col, title=title, linewidth=linewidth)
+        plt.contour(seg, levels=levels, colors=col)
         plt.tight_layout()
         plt.draw()
         plt.show()
@@ -86,8 +86,107 @@ class StdIP:
         return np_img
 
 
+class Interactive:
+    def __init__(self, img):
+        self.img = img
+
+    def draw_points(self, n_pts=1):
+        """
+        Click points on the image
+        :param n_pts: number if points. Not restricted if n < 0. Terminate by closing the figure. Delete a point with right-click
+        :return: list of (x,y) coordinates and a binary image where the selected points are '1'
+        """
+        fig = plt.figure()
+        ax = fig.add_subplot(1,1,1)
+        ax.set_axis_off()
+        ax.imshow(self.img, cmap='gray')
+        pts = plt.ginput(n=n_pts, show_clicks=True, timeout=0)
+        bw_img = np.zeros(self.img.shape, dtype='float')
+        for idx in range(len(pts)):
+            xx, yy = int(pts[idx][0]), int(pts[idx][1])
+            bw_img[yy, xx] = 1.
+
+        return pts, bw_img
+
+    def draw_circle(self, rad=10):
+        """
+        Draw a circle by clicking a point and specifying radii. If rad < 0, it needs two points to get radii
+        :param rad: radii of circle. Set to negative if using additional point to select radii
+        :return: a function f such that f > 0 indicates inside the circle.
+        """
+        fig = plt.figure()
+        ax = fig.add_subplot(1,1,1)
+        ax.set_axis_off()
+        ax.imshow(self.img, cmap='gray')
+        if rad < 0: # no radii selected
+            pts = plt.ginput(n=2, show_clicks=True, timeout=0)
+            r = np.sqrt((pts[0][0] - pts[1][0])**2 + (pts[0][1] - pts[1][1])**2)
+            ctr = pts[0]
+            x0, y0 = ctr[0], ctr[1]
+        else:
+            ctr = plt.ginput(n=1, show_clicks=True, timeout=0)
+            r = rad
+            x0, y0 = ctr[0][0], ctr[0][1]
+
+        Nr, Nc = self.img.shape[0], self.img.shape[1]
+
+        [xx, yy] = np.meshgrid(range(Nc), range(Nr))
+        f = (xx - x0)**2 + (yy - y0)**2 - r*r
+        # ax.plot(x0, y0, '*')
+        # ax.contour(f, levels=[0])
+        # plt.draw()
+        # plt.show()
+        return -f
+
+    def draw_multi_circle(self, rad=10):
+        """
+        Draw multiple circles by clicking. Close figure to stop
+        :param rad: radii of circle. Set to negative if using additional point to select radii
+        :return: a function f such that f > 0 indicates inside the circle.
+        """
+        fig = plt.figure()
+        ax = fig.add_subplot(1,1,1)
+        ax.set_axis_off()
+        ax.imshow(self.img, cmap='gray')
+
+        ctr = plt.ginput(n=-1, show_clicks=True, timeout=0)
+        bw_img = np.zeros(self.img.shape, dtype='float')
+        Nr, Nc = self.img.shape[0], self.img.shape[1]
+        [xx, yy] = np.meshgrid(range(Nc), range(Nr))
+        for ii in range(len(ctr)):
+            x0, y0 = ctr[ii][0], ctr[ii][1]
+            f = (xx - x0) ** 2 + (yy - y0) ** 2 - rad * rad
+            bw_img += 1.*(f < 0)
+        return 1. * (bw_img > 0)
+
+    def draw_polygons(self, n_poly=1):
+        from _roipoly import roipoly
+        mask = np.zeros(self.img.shape, dtype='float')
+        for ii in range(n_poly):
+            strng = "Enter polygon:" + str(ii+1)
+            fig = plt.figure()
+            fig.suptitle(strng)
+            ax = fig.add_subplot(1, 1, 1)
+            ax.set_axis_off()
+            ax.imshow(self.img, cmap='gray')
+            ax.contour(mask, levels=[0])
+            roi = roipoly(roicolor='c', fig=fig, ax=ax)
+            mask += 1.* roi.getMask(self.img)
+        return mask
+
+
+
 if __name__ == '__main__':
     img = StdIO.imread_2d('../image_1.png')
+    # pts, pt_img = Interactive(img).draw_points(n_pts=- 4)
+    # circ = Interactive(img).draw_circle(rad=20)
+    # circ = Interactive(img).draw_multi_circle(rad=10)
+    circ = Interactive(img).draw_polygons(n_poly=2)
+    StdIO.imoverlay(img, circ)
+    # StdIO.imshow(pt_img)
+    print "done"
+
+
     # hr_img = Misc.imresize(img, des_res_mm=2.)
     # StdIO.imshow(hr_img)
     # StdIO.imoverlay(img, 1.*(img>0.7), col='r')

@@ -34,7 +34,6 @@ def im2double(a):
     a /= np.abs(a).max()
     return a
 
-
 # Converts a mask to a SDF
 def mask2phi(init_a):
     phi = bwdist(init_a) - bwdist(1 - init_a) + im2double(init_a) - 0.5
@@ -62,9 +61,7 @@ def NeumannBoundCond(f):
 
     g[1:Nr-1, 0] = g[1:Nr-1, 2]
     g[1:Nr - 1, Nc-1] = g[1:Nr-1, Nc-3]
-    # g([1 nrow], [1 ncol]) = g([3 nrow - 2], [3 ncol - 2]);
-    # g([1 nrow], 2:end - 1) = g([3 nrow - 2], 2:end - 1);
-    # g(2:end - 1, [1 ncol]) = g(2:end - 1, [3 ncol - 2]);
+
     return g
 
 # Compute curvature along SDF -- for narrowband

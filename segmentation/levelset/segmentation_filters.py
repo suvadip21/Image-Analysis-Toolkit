@@ -166,6 +166,7 @@ class LevelSetFilter:
 
         def legendre_basis(img, k):
             '''
+            Compute the set of 2D legendre basis functions via outer product of 1d polynomials
             :param img: image of dimension m x n
             :param k: order of polynomial ( k = 0 is chan-vese)
             :return: matrix B: (Nr*Nc)x(k+1)^2, each column is a Legendre polynomial
@@ -279,8 +280,8 @@ if __name__=='__main__':
     mask[40:80, 40:100] = 1.
     # mask[20:100, 20:100] = 1.
     # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.5).chan_vese(mu=0.2, color='y', disp_interval=50)
-    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1500, convg_error=0.1).gac(mu=1.0, c0=1.5, sigma=2.0, color='b', disp_interval=50)
-    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=500, convg_error=0.01).l2s(k=2, mu=0.6, color='k', disp_interval=50)
+    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1500, convg_error=0.1).gac(mu=1.0, c0=1.5, sigma=4.0, color='b', disp_interval=50)
+    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=500, convg_error=1e-4).l2s(k=4, mu=0.6, color='k', disp_interval=50)
     IO.imoverlay(img, seg, title='Final result', linewidth=4)
 
 
