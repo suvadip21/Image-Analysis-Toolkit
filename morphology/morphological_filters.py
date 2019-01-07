@@ -9,6 +9,7 @@ from misc.helpers import StdIP as IP
 from misc.helpers import StdIO as IO
 from skimage.morphology import black_tophat, skeletonize, convex_hull_image, remove_small_objects, remove_small_holes, label
 from skimage.morphology import binary_erosion, binary_dilation, binary_closing, binary_opening
+from skimage.morphology import erosion, dilation, closing, opening
 from skimage.measure import regionprops
 from skimage.morphology import disk
 
@@ -17,7 +18,7 @@ class BinaryMorphology:
     Set of methods which will work on binary images only
     """
     def __init__(self, img):
-        self.bw = (img > 0.1) * 1.  # force convert to gray
+        self.bw = (img > 0.1) * 1.  # force convert to binary
 
     def bwdilate(self, r=1):
         se = disk(r)
@@ -84,6 +85,50 @@ class BinaryMorphology:
         return top_k_comp
 
 
+class GrayMorphology():
+    def __init__(self, img):
+        self.img = IP.im2double(img)
+
+    def imdilate(self, r=1):
+        se = disk(r)
+        return dilation(self.img, selem=se)* 1.
+
+    def imerode(self, r=1):
+        se = disk(r)
+        return erosion(self.img, selem=se)* 1.
+
+    def imopen(self, r=1):
+        se = disk(r)
+        return opening(self.img, selem=se)* 1.
+
+    def imclose(self, r=1):
+        se = disk(r)
+        return closing(self.img, selem=se)* 1.
+
+    def areaopen(self, area=100, l1=0., l2=1.):
+
+        l1 = int(min(255*self.img.min(), 255* (l1/(l1 + 1e-5))))
+        l2 = int(max(self.img.max()*255, (255 * (l2 / (l2 + 1e-5)))))
+        pixel_range = range(l1, l2 + 1)
+
+        recon_img = np.zeros(self.img.shape)
+        # fig = plt.figure()
+        # ax1 = fig.add_subplot(1, 2, 1)
+
+        for level in pixel_range:
+            tmp_bw_img = 1. * (255. * self.img > level)
+            tmp_clean_img = BinaryMorphology(tmp_bw_img).bwareaopen(area=area)
+            # ax1.cla()
+            # ax1.imshow(tmp_clean_img, cmap='gray')
+            # plt.draw()
+            # fig.suptitle(str(level))
+            # plt.pause(0.001)
+            recon_img += tmp_clean_img
+
+        recon_img = IP.linstretch(recon_img/len(pixel_range))
+        return recon_img
+
+# TODO: class GrayMorphology: opn-close and gray areaopen
 # class Morphology:
 #     def __init__(self):
 
@@ -92,19 +137,28 @@ class BinaryMorphology:
 if __name__ == '__main__':
     from segmentation.classic import Thresholding
     img = IO.imread_2d('../image_2.png')
-    bin_img = Thresholding(img).percentile_threshold(p1=75, p2=100)
-    morph_img = BinaryMorphology(bin_img).bwclose(r=4)
-    label_img, n_cc = BinaryMorphology(morph_img).bwlabel()
+    # bin_img = Thresholding(img).percentile_threshold(p1=75, p2=100)
+    # morph_img = BinaryMorphology(bin_img).bwclose(r=4)
+    # label_img, n_cc = BinaryMorphology(morph_img).bwlabel()
+    #
+    # k_largest_img = BinaryMorphology(morph_img).klargestregions(k=1)
 
-    k_largest_img = BinaryMorphology(morph_img).klargestregions(k=1)
+    gray_morph_img = GrayMorphology(img).areaopen(area=100, l1=0.1, l2=1.)
+
+    # fig = plt.figure()
+    # ax = fig.add_subplot(1,1,1)
+    # ax.imshow(img, cmap='gray')
+    # ax.contour(morph_img, levels=[0], colors='r')
+    # ax.contour(k_largest_img, levels=range(int(k_largest_img.max())), colors='b')
+    # # ax.imshow(label_img)
+    # plt.draw()
+    # plt.show()
 
     fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    ax.imshow(img, cmap='gray')
-    ax.contour(morph_img, levels=[0], colors='r')
-    ax.contour(k_largest_img, levels=range(int(k_largest_img.max())), colors='b')
+    ax1, ax2= fig.add_subplot(1,2,1), fig.add_subplot(1,2,2)
+    ax1.imshow(img, cmap='gray')
+    ax2.imshow(gray_morph_img, cmap='gray')
     # ax.imshow(label_img)
     plt.draw()
     plt.show()
 
-    print "num_cc = ", n_cc
