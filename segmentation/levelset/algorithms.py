@@ -1,11 +1,13 @@
 import numpy as np
 import scipy.ndimage as nd
-from misc.helpers import StdIO as IO
 from matplotlib import pyplot as plt
-import levelset_helper as H
+from scipy.misc import comb
+
+from misc.helpers import StdIO as IO
+from segmentation.levelset import levelset_helper as H
 from filters.spatial import Filter
 from misc.helpers import Interactive as IT
-from scipy.misc import comb
+
 
 eps = np.finfo(float).eps
 
@@ -22,6 +24,64 @@ class LevelSetFilter:
         self.init_mask = init_mask
         self.max_iter = max_iters
         self.tolerance = convg_error
+
+    """
+    Curve evolution as per C_t = (F) n
+    """
+    def curve_evolve(self, mu=0.1, F=1., color='r', disp_interval=20):
+        """
+        :param mu: Smoothness parameteer
+        :param color: contour color
+        :param disp_interval: contour display interval
+        :return: levelset, # iterations
+        """
+        phi = H.mask2phi(self.init_mask)
+        phi0 = np.copy(phi)
+        u = self.img
+        stop = False
+        prev_mask = self.init_mask
+        its = 0
+        c = 0
+
+        if (disp_interval > 0):
+            fig = plt.figure()
+            ax = fig.add_subplot(1,1,1)
+
+        while (its < self.max_iter and stop==False):
+            h_phi = heaviside(phi, 2.0)
+            delta_phi = dirac(phi, 2.0)
+            grad_phi = np.gradient(phi)
+            grad_phi_mag = np.sqrt(grad_phi[0]**2 + grad_phi[1]**2)
+
+            kappa = H.curvature_central(phi)
+
+            dphi_dt = (F + mu * kappa) * grad_phi_mag          # Gradient decent
+            # dt = 0.8/(np.max(np.abs(dphi_dt)) + eps)                                # CFL criteria
+            dt = 0.4
+            # dphi_dt = F
+            phi += dt * dphi_dt
+            phi = H.NeumannBoundCond(phi)
+            phi = H.sussman(phi, 0.5)
+
+            # -- Convergence criteria
+            new_mask = 1.*(phi >=0)
+            c = H.convergence(prev_mask, new_mask, self.tolerance, c)
+            if c <= 5:
+                its = its + 1
+                prev_mask = new_mask
+            else:
+                stop = True
+
+            # -- Display of curve
+            if (disp_interval > 0 and np.mod(its, disp_interval)==0):
+                ax.cla()
+                ax.imshow(u, cmap='gray')
+                ax.contour(phi, levels=[0], colors=color)
+                ax.contour(phi0, levels=[0], colors='g')
+                plt.draw()
+                plt.pause(1e-5)
+
+        return phi, its
 
     """
     Active contour without edges - Chan & Vese, TIP'02
@@ -278,16 +338,17 @@ if __name__=='__main__':
     from misc.helpers import StdIO as IO
     # img = IO.imread_2d('../../image_3.png')
     # img = IO.imread_2d('../../spine_image000002.tif')
-    img = IO.imread_2d('../../4.png')
-    mask = IT(img).draw_circle(rad=30, ctr=[125., 125.])
-    # mask = IT(img).draw_polygons(1)
+    img = IO.imread_2d('../../data/4.png')
+    # mask = IT(img).draw_circle(rad=10, ctr=[125., 125.])
+    mask = IT(img).draw_polygons(1)
     mask = 1. * (mask > 0)
     # mask = np.zeros(img.shape)
     # mask[10:100, 30:130] = 1.
     # mask[20:100, 20:100] = 1.
     # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.5).chan_vese(mu=0.2, color='y', disp_interval=50)
     # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1500, convg_error=0.001).gac(mu=1.0, c0=-0.5, sigma=4.0, color='b', disp_interval=50)
-    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.05).l2s(k=0, mu=0.2, color='c', disp_interval=50)
+    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.05).l2s(k=0, mu=0.2, color='c', disp_interval=50)
+    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.05).curve_evolve(F=0.1, mu=0.1, color='c',disp_interval=5)
     IO.imoverlay(img, seg, title='Final result', linewidth=4)
 
 

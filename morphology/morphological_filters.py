@@ -1,17 +1,19 @@
 import numpy as np
 import scipy as sp
 from skimage.feature import canny
-from misc.helpers import StdIP as ip
+# from image_analysis_toolkit import misc
 from scipy import ndimage as ndi
 import cv2
-from matplotlib import pyplot as plt
-from misc.helpers import StdIP as IP
-from misc.helpers import StdIO as IO
 from skimage.morphology import black_tophat, skeletonize, convex_hull_image, remove_small_objects, remove_small_holes, label
 from skimage.morphology import binary_erosion, binary_dilation, binary_closing, binary_opening
 from skimage.morphology import erosion, dilation, closing, opening
 from skimage.measure import regionprops
 from skimage.morphology import disk
+from matplotlib import pyplot as plt
+
+# from misc.helpers import StdIP as ip
+from misc.helpers import StdIP as IP
+from misc.helpers import StdIO as IO
 
 class BinaryMorphology:
     """
@@ -42,6 +44,14 @@ class BinaryMorphology:
         :return:
         """
         return 1. * skeletonize(self.bw)
+
+    def bwdist(self):
+        """
+        Intermediary function. 'a' has only True/False vals,
+        so we convert them into 0/1 values - in reverse.
+        True is 0, False is 1, distance_transform_edt wants it that way.
+        """
+        return nd.distance_transform_edt(self.bw == 0)
 
     def bwareaopen(self, area=20):
         """
@@ -136,7 +146,7 @@ class GrayMorphology():
 
 if __name__ == '__main__':
     from segmentation.classic import Thresholding
-    img = IO.imread_2d('../image_2.png')
+    img = IO.imread_2d('../data/image_2.png')
     # bin_img = Thresholding(img).percentile_threshold(p1=75, p2=100)
     # morph_img = BinaryMorphology(bin_img).bwclose(r=4)
     # label_img, n_cc = BinaryMorphology(morph_img).bwlabel()

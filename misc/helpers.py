@@ -4,6 +4,7 @@ import scipy.ndimage as ndimage
 import cv2
 from matplotlib import pyplot as plt
 import glob
+import SimpleITK as sitk
 eps = 1e-8
 
 
@@ -17,6 +18,16 @@ def bwdist(a):
     return nd.distance_transform_edt(a == 0)
 
 class StdIO:
+    @staticmethod
+    def numpy_to_sitk2d(np_arr):
+        # Input Array is (nrow x ncol). Returns object shape (ncol x nrow)
+        return sitk.GetImageFromArray(np_arr)
+
+    @staticmethod
+    def sitk_to_numpy2d(sitk_img):
+        # Sitk object shape (ncol x nrow). Returns (nrow x ncol) array
+        return sitk.GetArrayFromImage(sitk_img)
+
     @staticmethod
     def imread_2d(fname, grayscale=True):
         img = ndimage.imread(fname, flatten=grayscale, mode=None)
@@ -34,6 +45,7 @@ class StdIO:
             x, y = list(pts[:, 0]), list(pts[:, 1])
             plt.scatter(x, y, c=pt_col, s=20, zorder=2)
         plt.tight_layout()
+        plt.axis('off')
         plt.show()
 
     @staticmethod
@@ -46,6 +58,7 @@ class StdIO:
         plt.tight_layout()
         plt.draw()
         plt.show()
+        plt.axis('off')
 
     @staticmethod
     def imread_multiple(folder_path, ext='.png', return_image=True):
@@ -75,6 +88,35 @@ class StdIP:
         return a
 
     @staticmethod
+    def bwdist(a):
+        """
+        Intermediary function. 'a' has only True/False vals,
+        so we convert them into 0/1 values - in reverse.
+        True is 0, False is 1, distance_transform_edt wants it that way.
+        """
+        return nd.distance_transform_edt(a == 0)
+
+
+    @staticmethod
+    def percentile_enhance(img, p1=0., p2=100.):
+        """
+        Keep values between p1-th and p2-th percentile
+        :param p1: lower percentile
+        :param p2: higher percentile
+        :return: binary image
+        """
+        low = min(p1, p2)
+        high = max(p1, p2)
+        low_val = np.percentile(img, low)
+        high_val = np.percentile(img, high)
+        # print low
+        # enh_img = np.copy(img)
+        enh_img = (img - low_val)/(high_val - low_val)
+        enh_img[enh_img < 0.] = 0.
+        enh_img[enh_img > 1.] = 1.
+        return enh_img
+
+    @staticmethod
     def imresize(img, orig_res_mm=1., des_res_mm=0.5, interpolation='cubic'):
         frac = orig_res_mm/des_res_mm
         a = sp.misc.imresize(img, frac, interp=interpolation, mode='F')*1.
@@ -99,6 +141,24 @@ class StdIP:
         np_img = ocv_img.astype('float')/255.
         return np_img
 
+    @staticmethod
+    def inpolygon(img, x, y):
+        Nr, Nc = img.shape[0], img.shape[1]
+        img = np.zeros((Nr, Nc), dtype='float')
+        for ii in range(len(y)):
+            rowpos = max(0, min(Nr-1, y[ii]))
+            colpos = max(0, min(Nc-1, x[ii]))
+            img[int(rowpos), int(colpos)] = 1.
+
+        img_ocv = StdIP.numpy_to_opencv(img)
+        contour = cv2.findContours(img_ocv, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        dist_map = np.zeros(img.shape)
+        for ii in range(Nr):
+            for jj in range(Nc):
+                dist_map[ii, jj] = cv2.pointPolygonTest(contour[1][0][:, 0, :], (jj, ii), True)
+
+        return dist_map
 
 class Interactive:
     def __init__(self, img):

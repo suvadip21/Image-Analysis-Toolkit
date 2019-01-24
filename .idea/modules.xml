@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/image-analysis-toolkit.iml" filepath="$PROJECT_DIR$/.idea/image-analysis-toolkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/image_analysis_toolkit.iml" filepath="$PROJECT_DIR$/.idea/image_analysis_toolkit.iml" />
     </modules>
   </component>
 </project>
