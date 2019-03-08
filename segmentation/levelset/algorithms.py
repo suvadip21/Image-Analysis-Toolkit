@@ -313,7 +313,7 @@ class LevelSetFilter:
             # -- Convergence criteria
             new_mask = 1.*(phi >=0)
             c = H.convergence(prev_mask, new_mask, self.tolerance, c)
-            if c <= 5:
+            if c <= 10:
                 its = its + 1
                 prev_mask = new_mask
             else:
@@ -338,17 +338,17 @@ if __name__=='__main__':
     from misc.helpers import StdIO as IO
     # img = IO.imread_2d('../../image_3.png')
     # img = IO.imread_2d('../../spine_image000002.tif')
-    img = IO.imread_2d('../../data/4.png')
-    # mask = IT(img).draw_circle(rad=10, ctr=[125., 125.])
-    mask = IT(img).draw_polygons(1)
+    img = IO.imread_2d('../../data/ameoba_1.png')
+    mask = IT(img).draw_circle(rad=0, ctr=[])
+    # mask = IT(img).draw_polygons(1)
     mask = 1. * (mask > 0)
     # mask = np.zeros(img.shape)
     # mask[10:100, 30:130] = 1.
     # mask[20:100, 20:100] = 1.
-    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.5).chan_vese(mu=0.2, color='y', disp_interval=50)
+    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=1e-5).chan_vese(mu=0.02, color='y', disp_interval=50)
     # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1500, convg_error=0.001).gac(mu=1.0, c0=-0.5, sigma=4.0, color='b', disp_interval=50)
-    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.05).l2s(k=0, mu=0.2, color='c', disp_interval=50)
-    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.05).curve_evolve(F=0.1, mu=0.1, color='c',disp_interval=5)
+    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=1e-5).l2s(k=1, mu=0.1, color='c', disp_interval=50)
+    # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.05).curve_evolve(F=0.1, mu=0.1, color='c',disp_interval=5)
     IO.imoverlay(img, seg, title='Final result', linewidth=4)
 
 

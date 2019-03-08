@@ -15,7 +15,7 @@ def bwdist(a):
     so we convert them into 0/1 values - in reverse.
     True is 0, False is 1, distance_transform_edt wants it that way.
     """
-    return nd.distance_transform_edt(a == 0)
+    return ndimage.distance_transform_edt(a == 0)
 
 class StdIO:
     @staticmethod
@@ -88,13 +88,18 @@ class StdIP:
         return a
 
     @staticmethod
+    def mask2phi(init_a):
+        phi = bwdist(init_a) - bwdist(1 - init_a) + StdIP.im2double(init_a) - 0.5
+        return -phi
+
+    @staticmethod
     def bwdist(a):
         """
         Intermediary function. 'a' has only True/False vals,
         so we convert them into 0/1 values - in reverse.
         True is 0, False is 1, distance_transform_edt wants it that way.
         """
-        return nd.distance_transform_edt(a == 0)
+        return ndimage.distance_transform_edt(a == 0)
 
 
     @staticmethod
@@ -197,7 +202,7 @@ class Interactive:
             ax = fig.add_subplot(1, 1, 1)
             ax.set_axis_off()
             ax.imshow(self.img, cmap='gray')
-            if rad < 0: # no radii selected
+            if rad <= 0: # no radii selected
                 pts = plt.ginput(n=2, show_clicks=True, timeout=0)
                 r = np.sqrt((pts[0][0] - pts[1][0])**2 + (pts[0][1] - pts[1][1])**2)
                 ctr = pts[0]
@@ -259,8 +264,8 @@ class Interactive:
 if __name__ == '__main__':
     img = StdIO.imread_2d('../image_1.png')
     # pts, pt_img = Interactive(img).draw_points(n_pts=- 4)
-    circ = Interactive(img).draw_circle(rad=20, ctr=[125., 125.])
-    # circ = Interactive(img).draw_multi_circle(rad=10)
+    # circ = Interactive(img).draw_circle(rad=20, ctr=[125., 125.])
+    circ = Interactive(img).draw_multi_circle(rad=10)
     # circ = Interactive(img).draw_polygons(n_poly=5)
     StdIO.imoverlay(img, circ)
     # StdIO.imshow(pt_img)
