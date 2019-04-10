@@ -3,6 +3,7 @@ import scipy as sp
 from skimage.feature import canny
 from misc.helpers import StdIP as ip
 from scipy import ndimage as ndi
+from scipy import signal
 import cv2
 
 class Kernel():
@@ -58,16 +59,20 @@ class Filter():
 
     @staticmethod
     def log_filter(img, sigma_mm=1., res=1.):
-        if sigma_mm > 0:
-            u = Filter.gaussian_filter(img, sigma_mm, res)
-        else:
-            u = np.copy(img)
-        g_u = np.gradient(u)
-        ux, uy = g_u[1], g_u[0]
-        uxx = np.gradient(ux)[1]
-        uyy = np.gradient(uy)[0]
-        laplacian = uxx + uyy
-        return laplacian
+        # if sigma_mm > 0:
+        #     u = Filter.gaussian_filter(img, sigma_mm, res)
+        # else:
+        #     u = np.copy(img)
+        # g_u = np.gradient(u)
+        # ux, uy = g_u[1], g_u[0]
+        # uxx = np.gradient(ux)[1]
+        # uyy = np.gradient(uy)[0]
+        # laplacian = uxx + uyy
+        from skimage.filters import laplace
+        from scipy.ndimage import gaussian_laplace
+        # log = laplace(img, ksize=int(3*sigma_mm/res))
+        log = gaussian_laplace(img, sigma=sigma_mm/res)
+        return log
 
     @staticmethod
     def median_filter(img, rad_mm=1., res=1.):
@@ -91,10 +96,11 @@ class Filter():
 
     @staticmethod
     def conv_2d(img, ker):
-        img_cv = ip.numpy_to_opencv(img)
-        blurred_img = cv2.filter2D(img_cv, -1, kernel=ker)
-        return ip.opencv_to_numpy(blurred_img)
-
+        # img_cv = ip.numpy_to_opencv(img)
+        # blurred_img = cv2.filter2D(img_cv, -1, kernel=ker)
+        blurred_img = signal.convolve2d(img, ker)
+        # return ip.opencv_to_numpy(blurred_img)
+        return blurred_img
 
 
 
@@ -103,13 +109,16 @@ class Filter():
 
 if __name__=='__main__':
     from misc.helpers import StdIO as IO
-    img = IO.imread_2d('../image_1.png')
+    img = IO.imread_2d('/home/suvadip21/Documents/Codes/image_analysis_toolkit/data/ameoba_1.png')
     # filt_img = Filter.mean_filter(img, rad_mm=10, res=0.2)
     # ker = Kernel(img.shape)
-    # gauss_ker = Kernel((100, 100)).gaussian(sigma_mm=10, res=0.2)
-    # filt_img = Filter.conv_2d(img, gauss_ker)
-    # g, gmag = Filter.gradient_filter(img, sigma_mm=4.)
-    # log_filter = Filter.log_filter(img, sigma_mm=15.)
-    # log_kernel = Kernel((30, 30)).laplacian_of_gaussian(sigma_mm=2., res=0.5)
-    IO.imshow(log_kernel)
+    gauss_ker = Kernel((100, 100)).gaussian(sigma_mm=15, res=1.)
+    filt_img = Filter.conv_2d(img, gauss_ker)
+
+    # g, gmag = Filter.gradient_filter(filt_img, sigma_mm=1.)
+    log_filter = Filter.log_filter(img, sigma_mm=5.)
+    # log_filter = laplace
+    # log_kernel = Kernel((15, 15)).laplacian_of_gaussian(sigma_mm=5., res=1.)
+    # log_filter = Filter.conv_2d(img, log_kernel)
+    IO.imshow(log_filter, imadjust=0)
 

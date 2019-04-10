@@ -168,7 +168,7 @@ class LevelSetFilter:
 
         # -- Compute the image derived feature map
         _, grad_sigma_u = Filter.gradient_filter(u, sigma_mm=sigma)
-        g = 1./(0.01 + grad_sigma_u**(1.0))       # edge feature map
+        g = 1./(0.01 + grad_sigma_u**(2.0))       # edge feature map
         g = (g - g.min())/(g.max() - g.min())
         grad_g = np.gradient(g)
 
@@ -204,7 +204,7 @@ class LevelSetFilter:
             # -- Display of curve
             if (disp_interval > 0 and np.mod(its, disp_interval)==0):
                 ax.cla()
-                ax.imshow(u, cmap='gray')
+                ax.imshow(g, cmap='gray')
                 ax.contour(phi, levels=[0], colors=color)
                 ax.contour(phi0, levels=[0], colors='g')
                 ax.set_axis_off()
@@ -347,7 +347,7 @@ if __name__=='__main__':
     # mask[20:100, 20:100] = 1.
     # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=1e-5).chan_vese(mu=0.02, color='y', disp_interval=50)
     # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1500, convg_error=0.001).gac(mu=1.0, c0=-0.5, sigma=4.0, color='b', disp_interval=50)
-    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=1e-5).l2s(k=1, mu=0.1, color='c', disp_interval=50)
+    seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=1e-15).l2s(k=1, mu=0.1, color='c', disp_interval=50)
     # seg, its = LevelSetFilter(img, init_mask=mask, max_iters=1000, convg_error=0.05).curve_evolve(F=0.1, mu=0.1, color='c',disp_interval=5)
     IO.imoverlay(img, seg, title='Final result', linewidth=4)
 
