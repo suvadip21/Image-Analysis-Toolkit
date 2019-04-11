@@ -5,12 +5,16 @@ from misc.helpers import StdIP as ip
 from scipy import ndimage as ndi
 from scipy import signal
 import cv2
+from scipy.ndimage import gaussian_laplace
+from scipy.ndimage import gaussian_gradient_magnitude
+# from skimage.filters import laplace
+from skimage.filters import gaussian
+from matplotlib import pyplot as plt
 
 class Kernel():
     def __init__(self, ker_size=(10, 10)):
         r, c = ker_size[0], ker_size[1]
         x, y = np.meshgrid(np.linspace(-c/2., c/2., c), np.linspace(-r/2., r/2., r))
-        # y, x = np.ogrid[-0.5:0.5:1./rows, -0.5:0.5:1./cols]
         self.y = y
         self.x = x
 
@@ -51,28 +55,22 @@ class Filter():
 
     @staticmethod
     def gaussian_filter(img, sigma_mm=1., res=1.):
-        img_cv = ip.numpy_to_opencv(img)
-        sz = (12*int(sigma_mm/res) + 1, 12*int(sigma_mm/res) + 1)
-        sigma = int(sigma_mm/res)
-        blurred_img = cv2.GaussianBlur(img_cv, sz, sigmaX=sigma)
-        return ip.opencv_to_numpy(blurred_img)
+        sigma = sigma_mm/res
+        blurred_img = gaussian(img, sigma)
+        return blurred_img
 
     @staticmethod
     def log_filter(img, sigma_mm=1., res=1.):
-        # if sigma_mm > 0:
-        #     u = Filter.gaussian_filter(img, sigma_mm, res)
-        # else:
-        #     u = np.copy(img)
-        # g_u = np.gradient(u)
-        # ux, uy = g_u[1], g_u[0]
-        # uxx = np.gradient(ux)[1]
-        # uyy = np.gradient(uy)[0]
-        # laplacian = uxx + uyy
-        from skimage.filters import laplace
-        from scipy.ndimage import gaussian_laplace
-        # log = laplace(img, ksize=int(3*sigma_mm/res))
         log = gaussian_laplace(img, sigma=sigma_mm/res)
         return log
+
+    @staticmethod
+    def laplacian_filter(img):
+        g = np.gradient(img)
+        g1 = np.gradient(g[0])
+        g2 = np.gradient(g[1])
+        gxx, gyy = g1[0], g2[1]
+        return gxx + gyy
 
     @staticmethod
     def median_filter(img, rad_mm=1., res=1.):
@@ -96,29 +94,39 @@ class Filter():
 
     @staticmethod
     def conv_2d(img, ker):
-        # img_cv = ip.numpy_to_opencv(img)
-        # blurred_img = cv2.filter2D(img_cv, -1, kernel=ker)
-        blurred_img = signal.convolve2d(img, ker)
-        # return ip.opencv_to_numpy(blurred_img)
+        img_cv = ip.numpy_to_opencv(img)
+        if ker.min() > 0:
+            blurred_img = cv2.filter2D(img_cv, -1, kernel=ker)
+            blurred_img =  ip.opencv_to_numpy(blurred_img)
+        else:   # I found a open-cv bug when kernel is negative
+            blurred_img = cv2.filter2D(img_cv/255., -1, kernel=ker)
         return blurred_img
-
-
-
 
 
 
 if __name__=='__main__':
     from misc.helpers import StdIO as IO
     img = IO.imread_2d('/home/suvadip21/Documents/Codes/image_analysis_toolkit/data/ameoba_1.png')
-    # filt_img = Filter.mean_filter(img, rad_mm=10, res=0.2)
-    # ker = Kernel(img.shape)
-    gauss_ker = Kernel((100, 100)).gaussian(sigma_mm=15, res=1.)
-    filt_img = Filter.conv_2d(img, gauss_ker)
 
-    # g, gmag = Filter.gradient_filter(filt_img, sigma_mm=1.)
-    log_filter = Filter.log_filter(img, sigma_mm=5.)
-    # log_filter = laplace
-    # log_kernel = Kernel((15, 15)).laplacian_of_gaussian(sigma_mm=5., res=1.)
-    # log_filter = Filter.conv_2d(img, log_kernel)
-    IO.imshow(log_filter, imadjust=0)
+    std = 10.
 
+    ker = Kernel((int(6*std), int(6*std)))
+    gauss_ker = ker.gaussian(sigma_mm=std)
+    log_ker = ker.laplacian_of_gaussian(sigma_mm=std)
+    mean_ker = ker.average(rad_mm=std)
+    # smooth_conv = Filter.conv_2d(img, gauss_ker)
+    log_conv = Filter.conv_2d(img, log_ker)
+
+    log_img = Filter.log_filter(img, sigma_mm=std)
+    # g, gmag = Filter.gradient_filter(smooth_img, sigma_mm=0.)
+    # log_img = Filter.log_filter(img, sigma_mm=std)
+    # laplacian_img = Filter.laplacian_filter(smooth_img)
+
+    f = plt.figure()
+    ax1 = f.add_subplot(1,2,1)
+    ax2 = f.add_subplot(1, 2, 2)
+    ax1.imshow(log_img, cmap='gray')
+    ax1.set_title('using filter')
+    ax2.imshow(log_conv, cmap='gray')
+    ax2.set_title('using convolution')
+    plt.show()
