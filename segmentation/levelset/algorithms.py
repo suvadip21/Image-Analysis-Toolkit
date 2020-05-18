@@ -3,10 +3,10 @@ import scipy.ndimage as nd
 from matplotlib import pyplot as plt
 from scipy.misc import comb
 
-from misc.helpers import StdIO as IO
-from segmentation.levelset import levelset_helper as H
-from filters.spatial import Filter
-from misc.helpers import Interactive as IT
+from image_analysis_toolkit.misc.helpers import StdIO as IO
+from image_analysis_toolkit.segmentation.levelset import levelset_helper as H
+from image_analysis_toolkit.filters.spatial import Filter
+from image_analysis_toolkit.misc.helpers import Interactive as IT
 
 
 eps = np.finfo(float).eps

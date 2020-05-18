@@ -12,8 +12,8 @@ from skimage.morphology import disk
 from matplotlib import pyplot as plt
 
 # from misc.helpers import StdIP as ip
-from misc.helpers import StdIP as IP
-from misc.helpers import StdIO as IO
+from image_analysis_toolkit.misc.helpers import StdIP as IP
+from image_analysis_toolkit.misc.helpers import StdIO as IO
 
 class BinaryMorphology:
     """
